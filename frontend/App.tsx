@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 interface PumpInfo {
   id: number;
   name: string;
   lat: number;
   lon: number;
+  distance?: number;
 }
 
 type ApiResponse = {
-  pump: PumpInfo;
-  distance: number;
+  pumps: PumpInfo[];
 };
 
 export default function App() {
@@ -22,10 +22,10 @@ export default function App() {
       async ({ coords }) => {
         try {
           const res = await fetch(
-            `http://localhost:8000/nearest?lat=${coords.latitude}&lon=${coords.longitude}`
+            `http://localhost:8000/pumps?lat=${coords.latitude}&lon=${coords.longitude}`
           );
           setData(await res.json());
-        } catch (err) {
+        } catch {
           setError('Failed to fetch');
         }
       },
@@ -36,10 +36,22 @@ export default function App() {
   if (error) return <Text>{error}</Text>;
   if (!data) return <Text>Loading...</Text>;
 
+  const renderItem = ({ item }: { item: PumpInfo }) => (
+    <View style={styles.item}>
+      <Text style={styles.name}>{item.name}</Text>
+      {item.distance !== undefined && (
+        <Text>{item.distance} m away</Text>
+      )}
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{data.pump.name}</Text>
-      <Text>{data.distance} meters away</Text>
+      <FlatList
+        data={data.pumps}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={renderItem}
+      />
     </View>
   );
 }
@@ -47,11 +59,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 50,
   },
-  title: {
-    fontSize: 20,
+  item: {
+    padding: 16,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+  name: {
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });

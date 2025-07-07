@@ -121,6 +121,8 @@ uvicorn backend.main:app --reload
 
 The `/nearest` endpoint expects `lat` and `lon` query parameters and returns the closest pump from the sample dataset.
 
+Use `/pumps?lat=<lat>&lon=<lon>` to get all pumps sorted by distance with a distance field. Omitting the parameters returns the full dataset unsorted.
+
 ## MVP React Native App
 
-The `frontend` folder contains a minimal `App.tsx` that fetches from the backend. Use Expo or your preferred React Native setup to run it.
+The `frontend` folder contains a minimal `App.tsx` that fetches all pumps from the backend and displays them in a list ordered by distance from your current location. Use Expo or your preferred React Native setup to run it.
