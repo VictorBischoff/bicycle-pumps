@@ -109,3 +109,18 @@ def nearest(lat: float = Query(...), lon: float = Query(...)):
 - Integrate bike-lane status feeds.
 - Optional Apple Watch / Wear OS support.
 
+
+## Running the MVP Backend
+
+Install dependencies and start the server:
+
+```bash
+pip install -r backend/requirements.txt
+uvicorn backend.main:app --reload
+```
+
+The `/nearest` endpoint expects `lat` and `lon` query parameters and returns the closest pump from the sample dataset.
+
+## MVP React Native App
+
+The `frontend` folder contains a minimal `App.tsx` that fetches from the backend. Use Expo or your preferred React Native setup to run it.
