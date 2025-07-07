@@ -1,0 +1,5 @@
+[
+  {"id": 1, "name": "Town Square Pump", "lat": 55.6761, "lon": 12.5683},
+  {"id": 2, "name": "University Pump", "lat": 55.6805, "lon": 12.5710},
+  {"id": 3, "name": "Harbor Pump", "lat": 55.6750, "lon": 12.5800}
+]
