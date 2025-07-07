@@ -40,3 +40,18 @@ async def nearest(lat: float = Query(...), lon: float = Query(...)):
             min_dist = dist
             closest = pump
     return {"pump": closest, "distance": round(min_dist, 1)}
+
+
+@app.get("/pumps")
+async def list_pumps(lat: float | None = Query(None), lon: float | None = Query(None)):
+    """Return all pumps. If lat and lon are provided, pumps are returned with a
+    distance field and sorted by that distance."""
+
+    pumps = PUMPS.copy()
+    if lat is not None and lon is not None:
+        for p in pumps:
+            p["distance"] = haversine(lat, lon, p["lat"], p["lon"])
+        pumps.sort(key=lambda x: x["distance"])
+        for p in pumps:
+            p["distance"] = round(p["distance"], 1)
+    return {"pumps": pumps}
